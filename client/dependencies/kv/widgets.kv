@@ -1,0 +1,187 @@
+#: kivy 2.3.0
+#: import Metrics kivy.metrics.Metrics
+#: import NoTransition kivy.uix.screenmanager.NoTransition
+<SM>: 
+    id: sm
+    transition: NoTransition()
+    EmptyScreen:
+    SplashScreen:
+        id: Splash
+    ServerAddScreen:
+        id: ServerAdd
+    UserNameScreen:
+        id: UserName
+<EmptyScreen>: 
+    name: 'Empty'
+<SplashScreen>: 
+    name: 'Splash'
+    md_bg_color: self.theme_cls.backgroundColor
+    GridLayout:
+        rows: 5
+        pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+        size_hint: None, None
+        size: 250 * Metrics.dp, 145 * Metrics.dp
+        TypeWriter:
+            id: name_typer
+            size_hint: 1, None
+            height: 45 * Metrics.dp
+            font_size: 50 * Metrics.sp
+            bold: True
+        Label:
+            size_hint: 1, None
+            height: 20 * Metrics.dp
+        Image:
+            id: loader
+            size_hint: 1, None
+            height: 40 * Metrics.dp
+            color: [0, 0, 0, 0]
+            source: r'dependencies/icons/loader.gif'
+            anim_delay: 0.04
+        Label:
+            size_hint: 1, None
+            height: 20 * Metrics.dp
+        Label:
+            id: status_label
+            size_hint: 1, None
+            height: 20 * Metrics.dp
+            font_size: 13 * Metrics.sp
+            color: [1, 1, 1, 0.5]
+            italic: True
+<ServerAddScreen>:
+    name: 'ServerAdd'
+    md_bg_color: self.theme_cls.backgroundColor
+    MDTextField:
+        id: server_input
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size_hint: None, None
+        size: 250 * Metrics.dp, 250 * Metrics.dp
+        font_size: 15 * Metrics.sp
+        theme_text_color: 'Custom'
+        text_color_normal: 'gray'
+        theme_line_color: 'Custom'
+        line_color_focus: 'orange'
+        error_color: [1, 0, 0, 1]
+        on_text_validate: root.on_text_validate_server_input()
+        MDTextFieldHintText:
+            text: 'Server Address'
+<UserNameScreen>: 
+    name: 'UserName'
+    md_bg_color: self.theme_cls.backgroundColor
+    GridLayout:
+        rows: 3
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size_hint: None, None
+        size: 350 * Metrics.dp, 150 * Metrics.dp
+        GridLayout:
+            cols: 4
+            size_hint: 1, None
+            height: 80 * Metrics.dp
+            Label:
+                size_hint: None, 1
+                width: 20 * Metrics.dp
+            Image:
+                source: r'dependencies/icons/Icon.png'
+            Label:
+                text: 'PeerChat'
+                font_size: 30 * Metrics.dp
+                bold: True
+            Label:
+                size_hint: None, 1
+                width: 100 * Metrics.dp
+        Label:
+            size_hint: 1, None
+            height: 10 * Metrics.dp
+        MDTextField:
+            id: username_input
+            theme_text_color: 'Custom'
+            text_color_normal: 'gray'
+            theme_line_color: 'Custom'
+            line_color_focus: 'orange'
+            error_color: [1, 0, 0, 1]
+            on_text_validate: root.on_text_validate_username_input()
+            on_text: root.change_hint_text('Enter your username')
+            MDTextFieldHintText:
+                text: root.hint_text
+                text_color_focus: 'orange'
+            MDTextFieldHelperText:
+                text: 'Use the same IP and device for existing users.'
+                mode: 'persistent'
+            MDTextFieldMaxLengthText:
+                max_text_length: 20
+<PeersList>:
+    md_bg_color: self.theme_cls.backgroundColor
+    ScrollView:
+        always_overscroll: False
+        bar_width: 0
+        smooth_scroll_end: 0
+        BoxLayout:
+            id: peers_list
+            orientation: 'vertical'
+            size_hint: 1, None
+            height: self.minimum_height
+            padding: 10 * Metrics.dp
+            spacing: 5 * Metrics.dp
+            Label:
+                size_hint: 1, None
+                height: 8 * Metrics.dp
+            Label:
+                id: empty_list_label
+                size_hint: 1, None
+                height: 30 * Metrics.dp
+                text: 'There are no chats yet.'
+                font_size: 17 * Metrics.sp
+                italic: True
+<PeerButton>:
+    theme_width: 'Custom'
+    size_hint_x: 1
+    height: 40 * Metrics.dp
+    style: 'outlined'
+    halign: 'left'
+    valign: 'center'
+    text_color: [0, 0, 0, 0]
+    state_hover: 0
+    radius: [10 * Metrics.dp, 10 * Metrics.dp, 10 * Metrics.dp, 10 * Metrics.dp]
+    theme_bg_color: 'Custom'
+<MessageLabel>:
+    size_hint_x: None
+    width: 0
+    size_hint_y: None
+    height: message_label.texture_size[1] + 30 * Metrics.dp
+    state_hover: 0
+    MDScreen:
+        id: message_screen
+        radius: 15  * Metrics.dp
+        MDBoxLayout:
+            orientation: 'vertical'
+            Label:
+                size_hint: 1, None
+                height: 12 * Metrics.dp
+            MDLabel:
+                id: message_label
+                font_style: 'Label'
+                valign: 'middle'
+                halign: 'left'
+                color: [1, 1, 1, 1]
+                font_name: 'Roboto'
+                padding_x: 10 * Metrics.dp
+            MDLabel:
+                id: time_label
+                size_hint: 1, None
+                height: 5 * Metrics.dp
+                font_style: 'Label'
+                role: 'small'
+                valign: 'top'
+                halign: 'right'
+                padding_x: 10 * Metrics.dp
+            Label:
+                size_hint: 1, None
+                height: 7 * Metrics.dp
+<DateLabel>:
+    pos_hint: {'center_x': .5}
+    size_hint: None, None
+    size: 70 * Metrics.dp, 30 * Metrics.dp
+    radius: [10 * Metrics.dp, 10 * Metrics.dp, 10 * Metrics.dp, 10 * Metrics.dp]
+    state_hover: 0
+    Label:
+        id: date_label
+        font_size: 12 * Metrics.sp

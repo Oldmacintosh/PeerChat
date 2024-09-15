@@ -1,0 +1,192 @@
+#: kivy 2.3.0
+<HomeScreen>: 
+    name: 'Home'
+    md_bg_color: self.theme_cls.backgroundColor
+    GridLayout:
+        cols: 3
+        GridLayout:
+            rows: 3
+            size_hint: None, 1
+            width: 350 * Metrics.dp
+            GridLayout:
+                cols: 5
+                size_hint: 1, None
+                height: 60 * Metrics.dp
+                Label:
+                    id: menu_title_label
+                    text: 'Chats'
+                    font_size: 18 * Metrics.sp
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+                    padding_x: 10 * Metrics.dp
+                GridLayout:
+                    rows: 3
+                    size_hint: None, 1
+                    width: 40 * Metrics.dp
+                    Label:
+                    MDIconButton:
+                        id: edit_username_button
+                        icon: 'account-edit'
+                        theme_icon_color: 'Custom'
+                        icon_color: 'white'
+                        on_release: root.on_release_edit_username()
+                    Label:
+                Label:
+                    size_hint: None , 1
+                    width: 20 * Metrics.sp
+                GridLayout:
+                    rows: 3
+                    size_hint: None , 1
+                    width: 40 * Metrics.dp
+                    Label:
+                    MDIconButton:
+                        id: search_peer_button
+                        icon: 'account-search'
+                        theme_icon_color: 'Custom'
+                        icon_color: 'white'
+                        on_release: root.on_release_search_peer()
+                    Label:
+                Label:
+                    size_hint: None , 1
+                    width: 20 * Metrics.dp
+            Label:
+                size_hint: 1, None
+                height: 20 * Metrics.dp
+            ScreenManager:
+                id: sm
+                PeersList:
+                    name: 'Chats'
+                    id: chats
+                SearchPeer:
+                    name: 'SearchPeer'
+                    id: search_peer
+        MDDivider:
+            orientation: 'vertical'
+        ScreenManager: 
+            id: chat_sm
+            transition: NoTransition()
+            MDScreen:
+                name: 'Display'
+                md_bg_color: self.theme_cls.backgroundColor
+                GridLayout:
+                    rows: 2
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: None, None
+                    size: 300 * Metrics.dp, 250 * Metrics.dp
+                    GridLayout:
+                        cols: 2
+                        Image:
+                            source: r'dependencies/icons/Icon.png'
+                        Label:
+                            text: '[b]PeerChat[/b]'
+                            font_size: 28 * Metrics.sp
+                            markup: True
+                            padding_y: 200 * Metrics.dp
+                    Label:
+                        size_hint: 1, None
+                        height: 50 * Metrics.dp
+                        text: 'Send messages securely with\n        End to End Encryption.'
+                        color: [1, 1, 1, .5]
+<ChatScreen>:
+    md_bg_color: self.theme_cls.backgroundColor
+    BoxLayout:
+        orientation: 'vertical'
+        GridLayout:
+            cols: 3
+            Label:
+                size_hint: .08, 1
+            ScrollView:
+                id: chat_scroll_view
+                bar_width: 0
+                scroll_type: ['content']
+                smooth_scroll_end: 10
+                always_overscroll: False
+                BoxLayout:
+                    id: chat
+                    orientation: 'vertical'
+                    size_hint: 1, None
+                    height: self.minimum_height
+                    spacing: 10 * Metrics.dp
+                    padding: 20 * Metrics.dp
+                    MDCard:
+                        pos_hint: {'center_x': .5}
+                        size_hint: None, None
+                        size: chat_started_label.texture_size[0] + 20 * Metrics.dp, 30 * Metrics.dp
+                        md_bg_color: [1, 1, 1, .2]
+                        radius:
+                            [10 * Metrics.dp, 10 * Metrics.dp, 10 * Metrics.dp, 10 * Metrics.dp]
+                        state_hover: 0
+                        Label:
+                            id: chat_started_label
+                            font_size: 13 * Metrics.sp
+                            italic: True
+            Label:
+                size_hint: .08, 1
+        MDDivider:
+        Label: 
+            size_hint: 1, None
+            height: 1
+        GridLayout:
+            cols: 1
+            size_hint: 1, None
+            height: 50 * Metrics.dp
+            MDTextField:
+                id: message_input
+                mode: 'filled'
+                font_style: 'Label'
+                background_color: [0, 0, 0, 0]
+                theme_bg_color: 'Custom'
+                fill_color_normal: self.theme_cls.backgroundColor
+                fill_color_disabled: self.theme_cls.backgroundColor
+                fill_color_focus: self.theme_cls.backgroundColor
+                theme_text_color: 'Custom'
+                text_color_normal: 'gray'
+                theme_line_color: 'Custom'
+                line_color_focus: 'orange'
+                on_text_validate: root.send_message()
+                MDTextFieldHintText:
+                    text: root.hint_text
+                    font_style: 'Label'
+                    text_color_focus: [1, 1, 1, 0.81]
+                MDTextFieldMaxLengthText:
+                    max_text_length: 500
+        Label: 
+            size_hint: 1, None
+            height: 10 * Metrics.dp
+<SearchPeer>:
+    GridLayout:
+        rows: 4
+        GridLayout:
+            cols: 3
+            size_hint: 1, None
+            height: 70 * Metrics.dp
+            Label: 
+                size_hint: None, 1
+                width: 15 * Metrics.dp
+            MDTextField:
+                id: username_input
+                adaptive_height: False
+                font_size: 15 * Metrics.sp
+                theme_text_color: 'Custom'
+                text_color_normal: 'white'
+                theme_line_color: 'Custom'
+                line_color_focus: 'orange'
+                error_color: [1, 0, 0, 1]
+                on_text_validate: root.on_validate_text_username_input()
+                on_text: peers_list.ids.peers_list.clear_widgets()
+                MDTextFieldTrailingIcon:
+                    icon: 'magnify'
+                MDTextFieldHintText:
+                    text: 'Search for a peer'
+            Label: 
+                size_hint: None, 1
+                width: 15 * Metrics.dp
+        Label:
+            size_hint: 1, None
+            height: 10 * Metrics.dp
+        PeersList:
+            id: peers_list
+        Label:
+            size_hint: 1, None
+            height: 10 * Metrics.dp
