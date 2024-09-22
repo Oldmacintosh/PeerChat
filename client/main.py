@@ -8,7 +8,7 @@ initializing the connection to the server, managing the screens, etc.
 """
 
 __author__ = 'Oldmacintosh'
-__version__ = 'v1.1.0'
+__version__ = 'v1.1.1'
 __date__ = 'September 2024'
 __PROJECT__ = 'PeerChat'
 __DEBUG__ = False

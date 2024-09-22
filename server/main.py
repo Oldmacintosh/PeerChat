@@ -6,7 +6,7 @@ chat sessions between clients.
 """
 
 __author__ = 'Oldmacintosh'
-__version__ = 'v1.1.0'
+__version__ = ['v1.1.0', 'v1.1.1']
 __date__ = 'September 2024'
 __PROJECT__ = 'PeerChat'
 __DEBUG__ = False
@@ -59,7 +59,7 @@ def handle_client(client: socket.socket, address: tuple[str, int]) -> None:
     try:
         ip = address[0]
         mac = receive(client)
-        user = database.get_user(ip, mac)
+        user = database.get_user(mac)
         key = receive(client)
 
         if not user:
@@ -73,7 +73,7 @@ def handle_client(client: socket.socket, address: tuple[str, int]) -> None:
             if key != user[4]:
                 key_changed = True
                 database.change_key(user[0], key)
-                user = database.get_user(ip, mac)
+                user = database.get_user(mac)
             username = user[3]
             Logger.info('main: User connected(%s, %s)', username, ip)
             if key_changed:
@@ -228,7 +228,8 @@ def listen(_server: socket.socket) -> tuple[socket.socket, tuple[str, int]] | No
         _connection = _server.accept()
         _connection[0].settimeout(30)
         # Check if the client is a valid client if debug mode is off
-        if _connection[0].recv(64).decode() == f'{__PROJECT__}_{__version__}' or __DEBUG__:
+        if (_connection[0].recv(64).decode() in [f'{__PROJECT__}_{version}'
+                                                 for version in __version__] or __DEBUG__):
             _connection[0].settimeout(None)
         else:
             raise ConnectionResetError

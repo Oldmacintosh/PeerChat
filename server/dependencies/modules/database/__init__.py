@@ -56,7 +56,7 @@ class Database:
         self.cursor.execute('INSERT INTO users (ip, mac, username, key) VALUES (?, ?, ?, ?)',
                             (ip, mac, username, key))
         self.connection.commit()
-        return self.get_user(ip, mac)
+        return self.get_user(mac)
 
     def create_chat(self, user_id_1: int, user_id_2: int) -> str:
         """
@@ -112,15 +112,14 @@ class Database:
         self.cursor.execute(f'SELECT * FROM {chat_id} WHERE message_id = ?', (message_id,))
         return self.cursor.fetchone()
 
-    def get_user(self, ip: str, mac: str) -> list | None:
+    def get_user(self, mac: str) -> list | None:
         """
         Get a user from the database.
-        :param ip: The IP address of the user
         :param mac: The MAC address of the user
         :return: A list containing the user details or None if the user
                  is not found
         """
-        self.cursor.execute('SELECT * FROM users WHERE ip = ? AND mac = ?', (ip, mac))
+        self.cursor.execute('SELECT * FROM users WHERE mac = ?', (mac,))
         return self.cursor.fetchone()
 
     def get_user_id(self, _id: int) -> list:

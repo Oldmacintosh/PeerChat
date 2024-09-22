@@ -210,6 +210,8 @@ class HomeScreen(MDScreen):
                     Logger.info('home_screen: Peer key changed(%s)', data['peer_id'])
         except (ConnectionResetError, ConnectionAbortedError):
             pass
+        except Exception as error:
+            Logger.exception(error)
 
     def add_existing_chat(self, chat: dict) -> None:
         """
